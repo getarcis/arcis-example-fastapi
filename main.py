@@ -7,7 +7,7 @@ another shell.
 """
 
 from fastapi import FastAPI, Request
-from arcis import ArcisMiddleware
+from arcis.fastapi import ArcisMiddleware
 
 app = FastAPI()
 
