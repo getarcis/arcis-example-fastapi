@@ -1,0 +1,35 @@
+name: CI
+
+# Smoke test on every push + PR. Verifies that:
+#   1. pip install resolves the dependency tree (Arcis + FastAPI + uvicorn)
+#   2. main.py + attack.py parse cleanly so a cold-clone user doesn't
+#      hit a syntax error before they even start.
+#
+# Does NOT yet boot the server + fire the attack script in CI — that
+# lives on the org backlog as a separate item.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.10", "3.12"]
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python }}
+      - run: pip install -r requirements.txt
+      - name: Verify main.py compiles
+        run: python -m py_compile main.py
+      - name: Verify attack.py compiles
+        run: python -m py_compile attack.py

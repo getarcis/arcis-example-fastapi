@@ -1,5 +1,7 @@
 # arcis-example-fastapi
 
+[![CI](https://github.com/getarcis/arcis-example-fastapi/actions/workflows/ci.yml/badge.svg)](https://github.com/getarcis/arcis-example-fastapi/actions/workflows/ci.yml)
+
 > Minimal FastAPI + Arcis app. One install, one middleware registration, the full Arcis sanitizer pipeline gated against your route handler.
 
 ## What this is
