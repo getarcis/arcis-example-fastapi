@@ -1,9 +1,15 @@
 """Minimal FastAPI + Arcis app.
 
-One install (`pip install arcis`), one middleware registration, and
-twenty-plus attack vectors are blocked at the request boundary. Run
-with ``uvicorn main:app --reload``, then fire ``python attack.py`` in
-another shell.
+One install (`pip install arcis`), one middleware registration, and the
+full Arcis sanitizer pipeline (XSS, SQL, NoSQL, path, command, SSTI,
+XXE, prompt injection, prototype, LDAP, XPath, header injection) plus
+rate limiting + security headers is gated against your route handler.
+Bot detection, CSRF, CORS, cookies, URL / redirect / file validation,
+and error scrubbing are deliberate opt-ins on separate middleware. See
+README for the full "does / does not do" table.
+
+Run with ``uvicorn main:app --reload``, then fire ``python attack.py``
+in another shell.
 """
 
 from fastapi import FastAPI, Request

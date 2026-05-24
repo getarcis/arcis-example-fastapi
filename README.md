@@ -1,15 +1,31 @@
 # arcis-example-fastapi
 
-> Minimal FastAPI + Arcis app. One install, one middleware registration, twenty-plus attack vectors blocked.
+> Minimal FastAPI + Arcis app. One install, one middleware registration, the full Arcis sanitizer pipeline gated against your route handler.
 
 ## What this is
 
 The smallest possible demo of Arcis on FastAPI. Two files:
 
-- [`main.py`](./main.py) — FastAPI app with `app.add_middleware(ArcisMiddleware, block=True)` as the only security line.
-- [`attack.py`](./attack.py) — fires 8 attack payloads at the running server and reports which ones Arcis blocks.
+- [`main.py`](./main.py): FastAPI app with `app.add_middleware(ArcisMiddleware, block=True)` as the only security line.
+- [`attack.py`](./attack.py): fires 8 attack payloads at the running server and reports which ones Arcis blocks.
 
 Total dependencies: `arcis` + `fastapi` + `uvicorn` + `httpx` (httpx for the attack script only).
+
+## What this adapter does and does not do
+
+| Protection | `ArcisMiddleware(block=True)` | Where to get it |
+|---|---|---|
+| Input sanitization (XSS, SQL, NoSQL, path, command, SSTI, XXE, prompt injection, prototype, LDAP, XPath, header injection) | yes | built in |
+| Rate limiting (per-IP, in-memory; configurable to Redis) | yes | built in |
+| Security headers (CSP, HSTS, X-Frame-Options, etc.) | yes | built in |
+| Bot detection | no (opt-in) | `from arcis.middleware import bot_detection` |
+| CSRF protection | no (opt-in) | `from arcis.middleware import csrf` |
+| CORS | no (opt-in) | FastAPI's `CORSMiddleware`, or `from arcis.middleware import cors` |
+| Secure cookies | no (opt-in) | `from arcis.middleware import secure_cookies` |
+| URL / redirect / file-upload validation | no (opt-in) | `validate_url_ssrf`, `validate_redirect`, `validate_file_upload` from `arcis.validation` |
+| Error-leakage scrubbing | no (opt-in) | `from arcis.middleware import error_handler` |
+
+The 8-payload `attack.py` exercises only what `ArcisMiddleware(block=True)` ships out of the box. CSRF / CORS / cookies / bot / validation / error-scrub are deliberate opt-ins because every project enables them on different paths.
 
 ## Run it
 
