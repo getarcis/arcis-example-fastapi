@@ -1,0 +1,22 @@
+version: 2
+# Monthly grouped dep updates. Matches the cadence used across the
+# Arcis monorepo + dashboard so a single review window covers everything
+# at once.
+updates:
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 5
+    groups:
+      all-deps:
+        patterns: ["*"]
+    labels:
+      - dependencies
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    labels:
+      - dependencies
+      - ci
